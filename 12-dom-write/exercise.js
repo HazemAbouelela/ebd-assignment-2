@@ -15,6 +15,12 @@
 // Writing it twice is fine; pulling it out into a small function of its own is
 // also fine. Either way, remember it can come back undefined.
 
+function findCardByName(name) {
+  return Array.from(document.querySelectorAll(".card")).find(
+    (card) => card.querySelector("h3")?.textContent === name
+  );
+}
+
 /**
  * Adds one product card to the end of the list.
  *
@@ -30,9 +36,18 @@
  * @returns {void}
  */
 export function addProduct(name, price) {
-  // TODO: createElement for each piece, fill them in, append them together,
-  // then append the card to #list. Nothing appears until that last step.
-  throw new Error("addProduct is not written yet");
+  const card = document.createElement("li");
+  card.className = "card";
+
+  const title = document.createElement("h3");
+  title.textContent = name;
+
+  const priceEl = document.createElement("p");
+  priceEl.className = "price";
+  priceEl.textContent = `${price} EGP`;
+
+  card.append(title, priceEl);
+  document.querySelector("#list").append(card);
 }
 
 /**
@@ -43,8 +58,10 @@ export function addProduct(name, price) {
  * @returns {void}
  */
 export function removeProduct(name) {
-  // TODO: find the right card, then call .remove() on it.
-  throw new Error("removeProduct is not written yet");
+  const card = findCardByName(name);
+  if (card) {
+    card.remove();
+  }
 }
 
 /**
@@ -55,8 +72,10 @@ export function removeProduct(name) {
  * @returns {void}
  */
 export function markSoldOut(name) {
-  // TODO: find the card, then classList.add.
-  throw new Error("markSoldOut is not written yet");
+  const card = findCardByName(name);
+  if (card) {
+    card.classList.add("sold-out");
+  }
 }
 
 /**
@@ -65,8 +84,7 @@ export function markSoldOut(name) {
  * @returns {void}
  */
 export function clearProducts() {
-  // TODO: loop over all the cards and remove each one.
-  throw new Error("clearProducts is not written yet");
+  document.querySelectorAll("#list .card").forEach((card) => card.remove());
 }
 
 /**
@@ -90,4 +108,12 @@ export function clearProducts() {
  * Remember `export`.
  */
 
-// TODO: write wireButtons here.
+export function wireButtons() {
+  document.querySelector("#add")?.addEventListener("click", () => {
+    addProduct("Notebook", 45);
+  });
+
+  document.querySelector("#reset")?.addEventListener("click", () => {
+    clearProducts();
+  });
+}
