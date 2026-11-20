@@ -15,51 +15,52 @@
 
 /**
  * The text of the page's main heading.
- * pageHeading() -> "My Campus Store"
+ *   pageHeading() -> "My Campus Store"
  *
  * @returns {string}
  */
 export function pageHeading() {
-  // TODO: querySelector the h1, then read its textContent.
-  throw new Error("pageHeading is not written yet");
+  return document.querySelector("h1").textContent;
 }
 
 /**
  * How many product cards are on the page.
- * productCount() -> 5
+ *   productCount() -> 5
  *
  * @returns {number}
  */
 export function productCount() {
-  // TODO: querySelectorAll gives you all of them. It has a length.
-  throw new Error("productCount is not written yet");
+  return document.querySelectorAll(".card").length;
 }
 
 /**
  * The name in every card, in the order they appear.
- * productNames() -> ["Notebook", "Backpack", "Pen", "Desk lamp", "Calculator"]
+ *   productNames() -> ["Notebook", "Backpack", "Pen", "Desk lamp", "Calculator"]
  *
  * Each card holds its name in an <h3>.
  *
  * @returns {string[]}
  */
 export function productNames() {
-  // TODO: querySelectorAll, Array.from, then map. A NodeList has no .map.
-  throw new Error("productNames is not written yet");
+  return Array.from(document.querySelectorAll(".card h3")).map((heading) => heading.textContent);
 }
 
 /**
  * The price text shown on the card with that name.
- * priceOf("Pen") -> "15 EGP"
- * priceOf("Nothing") -> null, because there is no such card
+ *   priceOf("Pen") -> "15 EGP"
+ *   priceOf("Nothing") -> null, because there is no such card
  *
  * @param {string} name
  * @returns {string|null}
  */
 export function priceOf(name) {
-  // TODO: find the card whose h3 matches, then read its .price.
-  // Remember to return null when nothing matches.
-  throw new Error("priceOf is not written yet");
+  const card = Array.from(document.querySelectorAll(".card")).find(
+    (item) => item.querySelector("h3")?.textContent === name
+  );
+  if (!card) {
+    return null;
+  }
+  return card.querySelector(".price").textContent;
 }
 
 /**
@@ -79,4 +80,8 @@ export function priceOf(name) {
  * Remember `export`.
  */
 
-// TODO: write soldOutNames here.
+export function soldOutNames() {
+  return Array.from(document.querySelectorAll(".card.sold-out h3")).map(
+    (heading) => heading.textContent
+  );
+}
