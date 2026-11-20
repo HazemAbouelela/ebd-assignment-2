@@ -13,10 +13,12 @@
 // The first three are started for you. The LAST one has no code — you write
 // it, and it is the one that ties the whole of Part 2 together.
 
+const items = [];
+
 /**
  * Reads what is currently typed into the two boxes.
  *
- * readForm() -> { name: "Pen", price: 15 }
+ *   readForm() -> { name: "Pen", price: 15 }
  *
  * The name comes back trimmed. The price comes back as a NUMBER, not the
  * string the input gives you. An empty price box gives 0.
@@ -24,9 +26,9 @@
  * @returns {{ name: string, price: number }}
  */
 export function readForm() {
-  // TODO: read .value off each input. Trim the name, and convert the price
-  // with Number().
-  throw new Error("readForm is not written yet");
+  const name = document.querySelector("#name").value.trim();
+  const price = Number(document.querySelector("#price").value);
+  return { name, price };
 }
 
 /**
@@ -35,15 +37,15 @@ export function readForm() {
  * @returns {void}
  */
 export function clearForm() {
-  // TODO: set each input's .value to an empty string.
-  throw new Error("clearForm is not written yet");
+  document.querySelector("#name").value = "";
+  document.querySelector("#price").value = "";
 }
 
 /**
  * Draws the list from an array of items, replacing whatever was there before.
  *
- * renderList([{ name: "Pen", price: 15 }]) puts this inside #list:
- *   <li class="card"><h3>Pen</h3><p class="price">15 EGP</p></li>
+ *   renderList([{ name: "Pen", price: 15 }]) puts this inside #list:
+ *     <li class="card"><h3>Pen</h3><p class="price">15 EGP</p></li>
  *
  * Calling it again with a different array must REPLACE the old cards, not
  * add to them. An empty array leaves the list empty.
@@ -52,9 +54,23 @@ export function clearForm() {
  * @returns {void}
  */
 export function renderList(items) {
-  // TODO: empty #list first, then build one card per item — the same card
-  // shape as module 12.
-  throw new Error("renderList is not written yet");
+  const list = document.querySelector("#list");
+  list.innerHTML = "";
+
+  for (const item of items) {
+    const card = document.createElement("li");
+    card.className = "card";
+
+    const title = document.createElement("h3");
+    title.textContent = item.name;
+
+    const priceEl = document.createElement("p");
+    priceEl.className = "price";
+    priceEl.textContent = `${item.price} EGP`;
+
+    card.append(title, priceEl);
+    list.append(card);
+  }
 }
 
 /**
@@ -86,4 +102,28 @@ export function renderList(items) {
  * Remember `export`.
  */
 
-// TODO: write wireForm here.
+export function wireForm() {
+  const form = document.querySelector("#product-form");
+  const errorEl = document.querySelector("#error");
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const { name, price } = readForm();
+
+    if (!name) {
+      errorEl.textContent = "Give the product a name.";
+      return;
+    }
+
+    if (Number.isNaN(price) || price <= 0) {
+      errorEl.textContent = "Give the product a price.";
+      return;
+    }
+
+    errorEl.textContent = "";
+    items.push({ name, price });
+    renderList(items);
+    clearForm();
+  });
+}
